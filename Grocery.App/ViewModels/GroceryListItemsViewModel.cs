@@ -58,6 +58,7 @@ namespace Grocery.App.ViewModels
             Dictionary<string, object> paramater = new() { { nameof(GroceryList), GroceryList } };
             await Shell.Current.GoToAsync($"{nameof(ChangeColorView)}?Name={GroceryList.Name}", true, paramater);
         }
+
         [RelayCommand]
         public void AddProduct(Product product)
         {
@@ -68,6 +69,13 @@ namespace Grocery.App.ViewModels
             _productService.Update(product);
             AvailableProducts.Remove(product);
             OnGroceryListChanged(GroceryList);
+        }
+
+        [RelayCommand]
+        public void SearchProduct(string zoekterm)
+        {
+            if (zoekterm == "") return;
+            throw new NotImplementedException();
         }
 
         [RelayCommand]
