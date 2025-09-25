@@ -75,7 +75,10 @@ namespace Grocery.App.ViewModels
         public void SearchProduct(string zoekterm)
         {
             if (zoekterm == "") return;
-            throw new NotImplementedException();
+            AvailableProducts.Clear();
+            foreach (Product product in _productService.GetAll())
+                if (MyGroceryListItems.FirstOrDefault(g => g.ProductId == product.Id) == null && product.Stock > 0 && product.Name.Contains(zoekterm))
+                    AvailableProducts.Add(product);
         }
 
         [RelayCommand]
