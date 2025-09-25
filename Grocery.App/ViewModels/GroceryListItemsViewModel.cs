@@ -36,15 +36,16 @@ namespace Grocery.App.ViewModels
         {
             MyGroceryListItems.Clear();
             foreach (var item in _groceryListItemsService.GetAllOnGroceryListId(id)) MyGroceryListItems.Add(item);
-            GetAvailableProducts();
+            GetAvailableProducts("");
         }
 
-        private void GetAvailableProducts()
+        [RelayCommand]
+        private void GetAvailableProducts(string zoekterm)
         {
             AvailableProducts.Clear();
-            foreach (Product p in _productService.GetAll())
-                if (MyGroceryListItems.FirstOrDefault(g => g.ProductId == p.Id) == null  && p.Stock > 0)
-                    AvailableProducts.Add(p);
+            foreach (Product product in _productService.GetAll())
+                if (MyGroceryListItems.FirstOrDefault(g => g.ProductId == product.Id) == null && product.Stock > 0 && product.Name.Contains(zoekterm))
+                    AvailableProducts.Add(product);
         }
 
         partial void OnGroceryListChanged(GroceryList value)
@@ -69,16 +70,6 @@ namespace Grocery.App.ViewModels
             _productService.Update(product);
             AvailableProducts.Remove(product);
             OnGroceryListChanged(GroceryList);
-        }
-
-        [RelayCommand]
-        public void SearchProduct(string zoekterm)
-        {
-            if (zoekterm == "") return;
-            AvailableProducts.Clear();
-            foreach (Product product in _productService.GetAll())
-                if (MyGroceryListItems.FirstOrDefault(g => g.ProductId == product.Id) == null && product.Stock > 0 && product.Name.Contains(zoekterm))
-                    AvailableProducts.Add(product);
         }
 
         [RelayCommand]

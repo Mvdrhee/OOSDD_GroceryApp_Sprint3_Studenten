@@ -56,7 +56,7 @@
             <StackLayout>
                 <SearchBar
                     x:Name="Productsearchbar"
-                    SearchCommand="{Binding SearchProductCommand}"
+                    SearchCommand="{Binding GetAvailableProductsCommand}"
                     SearchCommandParameter="{Binding Source={RelativeSource Self}, Path=Text}">
                 </SearchBar>
                 <CollectionView ItemsSource="{Binding AvailableProducts}" Margin="5" WidthRequest="300" HorizontalOptions="Start"
