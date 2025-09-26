@@ -18,5 +18,14 @@ namespace Grocery.Core.Services
             if (PasswordHelper.VerifyPassword(password, client.Password)) return client;
             return null;
         }
+        public Client? Register(string name, string email, string password)
+        {
+            Client? client = _clientService.Get(email);
+            if (client != null) return null;
+            string passwordhash = PasswordHelper.HashPassword(password);
+            _clientService.Add(name, email, passwordhash);
+            Client? c = _clientService.Get(email);
+            return c;
+        }
     }
 }
