@@ -1,11 +1,12 @@
-﻿using CommunityToolkit.Maui.Alerts;
+﻿using System.Collections.ObjectModel;
+using System.Text.Json;
+using System.Threading;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Grocery.App.Views;
 using Grocery.Core.Interfaces.Services;
 using Grocery.Core.Models;
-using System.Collections.ObjectModel;
-using System.Text.Json;
 
 namespace Grocery.App.ViewModels
 {
@@ -44,7 +45,7 @@ namespace Grocery.App.ViewModels
         {
             AvailableProducts.Clear();
             foreach (Product product in _productService.GetAll())
-                if (MyGroceryListItems.FirstOrDefault(g => g.ProductId == product.Id) == null && product.Stock > 0 && product.Name.Contains(zoekterm))
+                if (MyGroceryListItems.FirstOrDefault(g => g.ProductId == product.Id) == null && product.Name.Contains(zoekterm))
                     AvailableProducts.Add(product);
         }
 
@@ -61,9 +62,14 @@ namespace Grocery.App.ViewModels
         }
 
         [RelayCommand]
-        public void AddProduct(Product product)
+        public async Task AddProduct(Product product, CancellationToken cancellationToken)
         {
-            if (product == null) return;
+            if (product == null || product.Stock == 0)
+            {
+                await Toast.Make("Dit product is niet beschikbaar").Show(cancellationToken);
+                return; 
+            }
+
             GroceryListItem item = new(0, GroceryList.Id, product.Id, 1);
             _groceryListItemsService.Add(item);
             product.Stock--;
