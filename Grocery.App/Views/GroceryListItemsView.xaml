@@ -54,6 +54,10 @@
 
         <Border Grid.Row="1" Grid.Column="1" Stroke="#C49B33" StrokeThickness="4" Padding="5" Margin="5" HorizontalOptions="Center">
             <StackLayout>
+                <SearchBar
+                    SearchCommand="{Binding GetAvailableProductsCommand}"
+                    SearchCommandParameter="{Binding Source={RelativeSource Self}, Path=Text}">
+                </SearchBar>
                 <CollectionView ItemsSource="{Binding AvailableProducts}" Margin="5" WidthRequest="300" HorizontalOptions="Start"
                     SelectionMode="Single"
                     SelectionChangedCommand="{Binding AddProductCommand}"
@@ -69,7 +73,13 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Label Grid.Column="0" Text="{Binding Name}" VerticalOptions="Center"/>
-                                <Label Grid.Column="1" Text="{Binding Stock}" VerticalOptions="Center" HorizontalOptions="End" Margin="0,0,10,0"/>
+                                <Label Grid.Column="1" Text="{Binding Stock}" VerticalOptions="Center" HorizontalOptions="End" Margin="0,0,10,0">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Stock}" Value="0">
+                                            <Setter Property="Text" Value="niet op voorraad" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
