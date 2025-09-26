@@ -7,10 +7,13 @@ using Grocery.App.Views;
 
 namespace Grocery.App.ViewModels
 {
-    public partial class LoginViewModel : BaseViewModel
+    public partial class RegisterViewModel : BaseViewModel
     {
         private readonly IAuthService _authService;
         private readonly GlobalViewModel _global;
+
+        [ObservableProperty]
+        private string name = "";
 
         [ObservableProperty]
         private string email = "";
@@ -19,34 +22,28 @@ namespace Grocery.App.ViewModels
         private string password = "";
 
         [ObservableProperty]
-        private string loginMessage = "";
+        private string registerMessage = "";
 
-        public LoginViewModel(IAuthService authService, GlobalViewModel global)
+        public RegisterViewModel(IAuthService authService, GlobalViewModel global)
         { //_authService = App.Services.GetServices<IAuthService>().FirstOrDefault();
             _authService = authService;
             _global = global;
         }
 
         [RelayCommand]
-        private void Login()
+        private void Register()
         {
-            Client? authenticatedClient = _authService.Login(Email, Password);
-            if (authenticatedClient != null)
+            Client? Client = _authService.Register(Name, Email, Password);
+            if (Client != null)
             {
-                LoginMessage = $"Welkom {authenticatedClient.Name}!";
-                _global.Client = authenticatedClient;
-                Application.Current.MainPage = new AppShell();
+                RegisterMessage = $"Welkom {Client.Name}!";
+                _global.Client = Client;
+                Application.Current.MainPage = new LoginView(new LoginViewModel(_authService, new GlobalViewModel()));
             }
             else
             {
-                LoginMessage = "Ongeldige inloggegevens.";
+                RegisterMessage = "Het emailadres is ongeldig of al in gebruik";
             }
-        }
-
-        [RelayCommand]
-        private void Register()
-        {
-            Application.Current.MainPage = new RegisterView(new RegisterViewModel(_authService, new GlobalViewModel()));
         }
     }
 }
