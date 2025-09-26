@@ -11,7 +11,7 @@ namespace Grocery.Core.Interfaces.Repositories
     {
         public Client? Get(string email);
         public Client? Get(int id);
-        public Client? Add(string name,  string email, string password);
+        public void Add(string name,  string email, string password);
         public List<Client> GetAll();
     }
 }

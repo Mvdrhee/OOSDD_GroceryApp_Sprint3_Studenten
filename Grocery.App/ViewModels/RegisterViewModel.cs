@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Grocery.Core.Interfaces.Services;
 using Grocery.Core.Models;
+using Grocery.App.Views;
 
 namespace Grocery.App.ViewModels
 {
@@ -21,7 +22,7 @@ namespace Grocery.App.ViewModels
         private string password = "";
 
         [ObservableProperty]
-        private string registerMessage;
+        private string registerMessage = "";
 
         public RegisterViewModel(IAuthService authService, GlobalViewModel global)
         { //_authService = App.Services.GetServices<IAuthService>().FirstOrDefault();
@@ -37,11 +38,11 @@ namespace Grocery.App.ViewModels
             {
                 RegisterMessage = $"Welkom {Client.Name}!";
                 _global.Client = Client;
-                Application.Current.MainPage = new AppShell();
+                Application.Current.MainPage = new LoginView(new LoginViewModel(_authService, new GlobalViewModel()));
             }
             else
             {
-                RegisterMessage = "Het emailadres is al in gebruik";
+                RegisterMessage = "Het emailadres is ongeldig of al in gebruik";
             }
         }
     }

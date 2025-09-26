@@ -11,16 +11,15 @@ namespace Grocery.App.ViewModels
     {
         private readonly IAuthService _authService;
         private readonly GlobalViewModel _global;
-        private readonly RegisterViewModel _registerViewModel;
 
         [ObservableProperty]
-        private string email = "user3@mail.com";
+        private string email = "";
 
         [ObservableProperty]
-        private string password = "user3";
+        private string password = "";
 
         [ObservableProperty]
-        private string loginMessage;
+        private string loginMessage = "";
 
         public LoginViewModel(IAuthService authService, GlobalViewModel global)
         { //_authService = App.Services.GetServices<IAuthService>().FirstOrDefault();
@@ -47,7 +46,7 @@ namespace Grocery.App.ViewModels
         [RelayCommand]
         private void Register()
         {
-            Application.Current.MainPage = new RegisterView(_registerViewModel);
+            Application.Current.MainPage = new RegisterView(new RegisterViewModel(_authService, new GlobalViewModel()));
         }
     }
 }

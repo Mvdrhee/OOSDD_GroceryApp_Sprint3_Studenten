@@ -24,7 +24,8 @@ namespace Grocery.Core.Services
             if (client != null) return null;
             string passwordhash = PasswordHelper.HashPassword(password);
             _clientService.Add(name, email, passwordhash);
-            return client;
+            Client? c = _clientService.Get(email);
+            return c;
         }
     }
 }
